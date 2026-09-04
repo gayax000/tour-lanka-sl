@@ -8,11 +8,22 @@ export default function GuideModal({ isOpen, onClose, onSave, editingDoc }) {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (editingDoc) setFormData(editingDoc);
-    else setFormData({
-      name: '', providerType: 'Local Guide', district: 'Ella & Badulla', category: 'Hiking & Nature',
-      languages: 'English, Sinhala', pricePerDay: '', contactEmail: '', bio: '', experienceTags: ['🌿 Eco Tourism', '🍛 Local Culture']
-    });
+    const user = JSON.parse(localStorage.getItem('tourLankaUser') || 'null');
+    if (editingDoc) {
+      setFormData(editingDoc);
+    } else {
+      setFormData({
+        name: user ? user.name : '',
+        providerType: 'Local Guide',
+        district: user && user.district ? user.district : 'Ella & Badulla',
+        category: 'Hiking & Nature',
+        languages: 'English, Sinhala',
+        pricePerDay: '',
+        contactEmail: user ? user.email : '',
+        bio: '',
+        experienceTags: ['🌿 Eco Tourism', '🍛 Local Culture']
+      });
+    }
     setErrors({});
   }, [editingDoc, isOpen]);
 

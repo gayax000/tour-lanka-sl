@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('tourLankaUser') || 'null');
@@ -25,12 +26,12 @@ export default function Navbar() {
       <div style={{
         maxWidth: '1180px',
         margin: '0 auto',
-        padding: '16px 20px',
+        padding: '14px 20px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         flexWrap: 'wrap',
-        gap: '15px'
+        gap: '12px'
       }}>
         <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span style={{ fontSize: '24px' }}>🏝️</span>
@@ -40,33 +41,44 @@ export default function Navbar() {
           </div>
         </Link>
 
-        <nav style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-          <Link to="/" className="btn" style={{ background: isActive('/') ? '#10b981' : 'transparent', color: 'white' }}>
+        {/* Mobile Hamburger Toggle Button */}
+        <button 
+          type="button"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="btn btn-secondary mobile-menu-btn"
+          style={{ display: 'none', padding: '6px 12px', fontSize: '16px' }}
+        >
+          {mobileMenuOpen ? '✖ Close' : '☰ Menu'}
+        </button>
+
+        {/* Navigation Links */}
+        <nav className={`nav-menu ${mobileMenuOpen ? 'open' : ''}`} style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <Link to="/" onClick={() => setMobileMenuOpen(false)} className="btn" style={{ background: isActive('/') ? '#10b981' : 'transparent', color: 'white' }}>
             🏡 Explore
           </Link>
-          <Link to="/guides" className="btn" style={{ background: isActive('/guides') ? '#10b981' : 'transparent', color: 'white' }}>
+          <Link to="/guides" onClick={() => setMobileMenuOpen(false)} className="btn" style={{ background: isActive('/guides') ? '#10b981' : 'transparent', color: 'white' }}>
             👤 Guides & Homestays
           </Link>
-          <Link to="/transport" className="btn" style={{ background: isActive('/transport') ? '#10b981' : 'transparent', color: 'white' }}>
+          <Link to="/transport" onClick={() => setMobileMenuOpen(false)} className="btn" style={{ background: isActive('/transport') ? '#10b981' : 'transparent', color: 'white' }}>
             🛺 Tuk-Tuk & Rentals
           </Link>
-          <Link to="/reviews" className="btn" style={{ background: isActive('/reviews') ? '#10b981' : 'transparent', color: 'white' }}>
+          <Link to="/reviews" onClick={() => setMobileMenuOpen(false)} className="btn" style={{ background: isActive('/reviews') ? '#10b981' : 'transparent', color: 'white' }}>
             ⭐ Reviews
           </Link>
 
           {user ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '10px' }}>
-              <Link to="/bookings" className="btn btn-primary">
-                📋 My Bookings ({user.role === 'admin' ? 'Provider Dashboard' : 'Tourist'})
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <Link to="/bookings" onClick={() => setMobileMenuOpen(false)} className="btn btn-primary">
+                📋 My Bookings ({user.role === 'admin' ? 'Provider' : 'Tourist'})
               </Link>
               <button onClick={handleLogout} className="btn btn-danger" style={{ padding: '8px 12px' }}>
                 Logout ({user.name.split(' ')[0]})
               </button>
             </div>
           ) : (
-            <div style={{ display: 'flex', gap: '8px', marginLeft: '10px' }}>
-              <Link to="/login" className="btn btn-secondary">Login</Link>
-              <Link to="/register" className="btn btn-primary">+ Join as Provider</Link>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="btn btn-secondary">Login</Link>
+              <Link to="/register" onClick={() => setMobileMenuOpen(false)} className="btn btn-primary">+ Join Provider</Link>
             </div>
           )}
         </nav>

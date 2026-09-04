@@ -64,86 +64,129 @@ export default function GuidesPage() {
         )}
       </div>
 
-      {/* Advanced Filters */}
-      <div style={{ background: '#ffffff', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', margin: '20px 0', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-        <input 
-          type="text" 
-          className="form-control" 
-          style={{ flex: '1 1 240px' }}
-          placeholder="🔍 Search guide by name, language or bio..." 
-          value={searchTerm} 
-          onChange={e => setSearchTerm(e.target.value)} 
-        />
+      {/* Advanced Filters & Quick Location Pills */}
+      <div style={{ background: '#ffffff', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', margin: '20px 0' }}>
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '12px' }}>
+          <input 
+            type="text" 
+            className="form-control" 
+            style={{ flex: '1 1 240px' }}
+            placeholder="🔍 Search guide by name, location (Ella, Sigiriya), language or bio..." 
+            value={searchTerm} 
+            onChange={e => setSearchTerm(e.target.value)} 
+          />
 
-        <select className="form-control" style={{ width: '200px' }} value={districtFilter} onChange={e => setDistrictFilter(e.target.value)}>
-          <option value="All">📍 All Districts</option>
-          <option>Ella & Badulla</option>
-          <option>Sigiriya & Dambulla</option>
-          <option>Mirissa & Galle</option>
-          <option>Kandy & Nuwara Eliya</option>
-          <option>Yala & Tissamaharama</option>
-          <option>Colombo & Negombo</option>
-        </select>
+          <select className="form-control" style={{ width: '200px' }} value={districtFilter} onChange={e => setDistrictFilter(e.target.value)}>
+            <option value="All">📍 All Districts</option>
+            <option>Ella & Badulla</option>
+            <option>Sigiriya & Dambulla</option>
+            <option>Mirissa & Galle</option>
+            <option>Kandy & Nuwara Eliya</option>
+            <option>Yala & Tissamaharama</option>
+            <option>Colombo & Negombo</option>
+          </select>
 
-        <select className="form-control" style={{ width: '180px' }} value={typeFilter} onChange={e => setTypeFilter(e.target.value)}>
-          <option value="All">👤 All Provider Types</option>
-          <option>Local Guide</option>
-          <option>Tuk-Tuk Driver</option>
-          <option>Village Homestay</option>
-        </select>
+          <select className="form-control" style={{ width: '180px' }} value={typeFilter} onChange={e => setTypeFilter(e.target.value)}>
+            <option value="All">👤 All Provider Types</option>
+            <option>Local Guide</option>
+            <option>Tuk-Tuk Driver</option>
+            <option>Village Homestay</option>
+          </select>
+        </div>
+
+        {/* Quick Location Pills */}
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', fontSize: '13px' }}>
+          <span style={{ fontWeight: 700, color: '#64748b' }}>📍 Popular Places:</span>
+          {['Ella', 'Sigiriya', 'Mirissa', 'Kandy', 'Yala'].map(place => (
+            <button
+              key={place}
+              type="button"
+              onClick={() => setSearchTerm(place === searchTerm ? '' : place)}
+              className="btn"
+              style={{
+                padding: '4px 10px',
+                fontSize: '12px',
+                background: searchTerm.toLowerCase() === place.toLowerCase() ? '#059669' : '#f1f5f9',
+                color: searchTerm.toLowerCase() === place.toLowerCase() ? 'white' : '#334155',
+                border: '1px solid #cbd5e1',
+                borderRadius: '16px'
+              }}
+            >
+              {place}
+            </button>
+          ))}
+          {searchTerm && (
+            <button 
+              type="button" 
+              onClick={() => setSearchTerm('')} 
+              style={{ background: 'none', border: 'none', color: '#dc2626', fontSize: '12px', cursor: 'pointer', fontWeight: 600 }}
+            >
+              ✖ Clear Search
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="card-grid">
-        {guides.map(guide => (
-          <div key={guide._id} className="card" style={{ borderTop: '4px solid #059669' }}>
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '6px' }}>
-                <span className="badge badge-eco">📍 {guide.district}</span>
-                <span style={{ color: '#059669', fontWeight: 800, fontSize: '15px' }}>Rs. {guide.pricePerDay} / day</span>
-              </div>
+        {guides.map(guide => {
+          // Ownership Check: User can ONLY Edit/Delete their OWN listing!
+          const isOwner = user && (
+            user.email?.toLowerCase() === guide.contactEmail?.toLowerCase() || 
+            user.email === 'admin@tourlanka.lk'
+          );
 
-              <h3 style={{ marginTop: '10px', color: '#0f172a' }}>{guide.name}</h3>
-              <p style={{ color: '#64748b', fontSize: '13px', margin: '4px 0', fontWeight: 600 }}>🏷️ {guide.category} ({guide.providerType})</p>
-              
-              {/* Experience Badges */}
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', margin: '8px 0' }}>
-                {(guide.experienceTags || ['🌿 Eco Tourism', '🍛 Local Culture']).map((tag, idx) => (
-                  <span key={idx} style={{ background: '#f1f5f9', color: '#334155', fontSize: '11px', padding: '3px 8px', borderRadius: '12px', fontWeight: 600 }}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <p style={{ color: '#334155', fontSize: '13px', marginTop: '8px', lineHeight: 1.4 }}>{guide.bio}</p>
-              
-              <div style={{ background: '#f8fafc', padding: '8px 12px', borderRadius: '8px', marginTop: '12px', fontSize: '12px' }}>
-                <p>🗣️ <strong>Languages:</strong> {guide.languages}</p>
-                <p>✉️ <strong>Contact:</strong> {guide.contactEmail}</p>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', gap: '8px', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #f1f5f9', paddingTop: '12px', marginTop: '16px' }}>
-              <button 
-                type="button"
-                className="btn btn-primary" 
-                style={{ padding: '8px 14px', fontSize: '13px', flex: 1 }}
-                onClick={() => {
-                  setBookingProvider(guide);
-                  setIsTouristModalOpen(true);
-                }}
-              >
-                📅 Book Now
-              </button>
-
-              {isAdmin && (
-                <div style={{ display: 'flex', gap: '6px' }}>
-                  <button className="btn btn-secondary" style={{ padding: '6px 10px', fontSize: '12px' }} onClick={() => { setEditingDoc(guide); setIsModalOpen(true); }}>Edit</button>
-                  <button className="btn btn-danger" style={{ padding: '6px 10px', fontSize: '12px' }} onClick={() => handleDelete(guide._id)}>Delete</button>
+          return (
+            <div key={guide._id} className="card" style={{ borderTop: '4px solid #059669' }}>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '6px' }}>
+                  <span className="badge badge-eco">📍 {guide.district}</span>
+                  <span style={{ color: '#059669', fontWeight: 800, fontSize: '15px' }}>Rs. {guide.pricePerDay} / day</span>
                 </div>
-              )}
+
+                <h3 style={{ marginTop: '10px', color: '#0f172a' }}>{guide.name}</h3>
+                <p style={{ color: '#64748b', fontSize: '13px', margin: '4px 0', fontWeight: 600 }}>🏷️ {guide.category} ({guide.providerType})</p>
+                
+                {/* Experience Badges */}
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', margin: '8px 0' }}>
+                  {(guide.experienceTags || ['🌿 Eco Tourism', '🍛 Local Culture']).map((tag, idx) => (
+                    <span key={idx} style={{ background: '#f1f5f9', color: '#334155', fontSize: '11px', padding: '3px 8px', borderRadius: '12px', fontWeight: 600 }}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <p style={{ color: '#334155', fontSize: '13px', marginTop: '8px', lineHeight: 1.4 }}>{guide.bio}</p>
+                
+                <div style={{ background: '#f8fafc', padding: '8px 12px', borderRadius: '8px', marginTop: '12px', fontSize: '12px' }}>
+                  <p>🗣️ <strong>Languages:</strong> {guide.languages}</p>
+                  <p>✉️ <strong>Contact:</strong> {guide.contactEmail}</p>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '8px', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #f1f5f9', paddingTop: '12px', marginTop: '16px' }}>
+                <button 
+                  type="button"
+                  className="btn btn-primary" 
+                  style={{ padding: '8px 14px', fontSize: '13px', flex: 1 }}
+                  onClick={() => {
+                    setBookingProvider(guide);
+                    setIsTouristModalOpen(true);
+                  }}
+                >
+                  📅 Book Now
+                </button>
+
+                {/* Only render Edit & Delete if user is the OWNER of this listing! */}
+                {isOwner && (
+                  <div style={{ display: 'flex', gap: '6px' }}>
+                    <button className="btn btn-secondary" style={{ padding: '6px 10px', fontSize: '12px' }} onClick={() => { setEditingDoc(guide); setIsModalOpen(true); }}>Edit</button>
+                    <button className="btn btn-danger" style={{ padding: '6px 10px', fontSize: '12px' }} onClick={() => handleDelete(guide._id)}>Delete</button>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <GuideModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleSave} editingDoc={editingDoc} />

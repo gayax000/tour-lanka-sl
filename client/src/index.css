@@ -70,3 +70,21 @@ h1, h2, h3, h4 { color: var(--text-main); font-weight: 700; }
   background: white; padding: 28px; border-radius: var(--radius-lg);
   width: 100%; max-width: 520px; max-height: 88vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
 }
+
+/* Mobile Responsive Media Queries (< 768px Smartphones & Tablets) */
+@media (max-width: 768px) {
+  .mobile-menu-btn { display: inline-flex !important; }
+  .nav-menu {
+    display: none !important;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 10px !important;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .nav-menu.open { display: flex !important; }
+  .card-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+  .container { padding: 16px 12px 60px !important; }
+  .modal-content { padding: 20px !important; }
+}
