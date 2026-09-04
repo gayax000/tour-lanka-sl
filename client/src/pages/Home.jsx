@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import API_BASE_URL from '../api';
+import heroBg from '../assets/hero.png';
 
 export default function Home() {
   const [stats, setStats] = useState({ guides: 0, bookings: 0, transports: 0, reviews: 0 });
@@ -28,29 +29,33 @@ export default function Home() {
 
   return (
     <div>
-      {/* Hero Banner Section */}
+      {/* Hero Banner Section with Blended Eco Background Image */}
       <section style={{
-        background: 'linear-gradient(135deg, #064e3b 0%, #047857 50%, #059669 100%)',
+        backgroundImage: `linear-gradient(135deg, rgba(6, 78, 59, 0.92) 0%, rgba(4, 120, 87, 0.88) 50%, rgba(5, 150, 105, 0.92) 100%), url(${heroBg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
         color: 'white',
-        padding: '60px 20px',
-        textAlign: 'center'
+        padding: '70px 20px',
+        textAlign: 'center',
+        boxShadow: 'inset 0 -10px 20px rgba(0,0,0,0.1)'
       }}>
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <span style={{ background: 'rgba(255,255,255,0.15)', padding: '6px 16px', borderRadius: '20px', fontSize: '13px', fontWeight: 700 }}>
+          <span style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(4px)', padding: '6px 16px', borderRadius: '20px', fontSize: '13px', fontWeight: 700, border: '1px solid rgba(255,255,255,0.2)' }}>
             🇱🇰 Empowering Authentic Sri Lankan Eco-Tourism
           </span>
-          <h1 style={{ fontSize: '40px', marginTop: '16px', color: '#ffffff', lineHeight: 1.2 }}>
+          <h1 style={{ fontSize: '42px', marginTop: '16px', color: '#ffffff', lineHeight: 1.2, textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
             Experience Genuine Sri Lanka With Verified Local Guides & Tuk-Tuk Drivers
           </h1>
-          <p style={{ fontSize: '16px', color: '#a7f3d0', marginTop: '12px', lineHeight: 1.6 }}>
+          <p style={{ fontSize: '16px', color: '#d1fae5', marginTop: '14px', lineHeight: 1.6, textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>
             Direct booking with zero middleman commissions. Supporting village homestays, local tuk-tuk drivers, and eco-tour guides across Sri Lanka.
           </p>
 
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '28px', flexWrap: 'wrap' }}>
-            <Link to="/guides" className="btn btn-primary" style={{ background: '#ffffff', color: '#047857', fontSize: '15px', padding: '12px 24px' }}>
+          <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', marginTop: '32px', flexWrap: 'wrap' }}>
+            <Link to="/guides" className="btn btn-primary" style={{ background: '#ffffff', color: '#047857', fontSize: '15px', padding: '12px 24px', fontWeight: 700 }}>
               🌿 Explore Eco Guides
             </Link>
-            <Link to="/transport" className="btn btn-secondary" style={{ background: 'transparent', color: 'white', borderColor: 'rgba(255,255,255,0.4)', fontSize: '15px', padding: '12px 24px' }}>
+            <Link to="/transport" className="btn btn-secondary" style={{ background: 'rgba(255,255,255,0.12)', color: 'white', borderColor: 'rgba(255,255,255,0.5)', fontSize: '15px', padding: '12px 24px', backdropFilter: 'blur(4px)' }}>
               🛺 Rent Local Tuk-Tuk
             </Link>
           </div>
