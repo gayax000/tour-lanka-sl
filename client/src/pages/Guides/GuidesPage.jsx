@@ -57,11 +57,19 @@ export default function GuidesPage() {
           <h2>🌿 Local Guides & Authentic Eco-Experiences ({guides.length})</h2>
           <p style={{ color: '#64748b' }}>Connect directly with verified Sri Lankan local guides & village experience hosts</p>
         </div>
-        {isAdmin && (
-          <button className="btn btn-primary" onClick={() => { setEditingDoc(null); setIsModalOpen(true); }}>
-            + Register Guide Listing
-          </button>
-        )}
+        <button 
+          className="btn btn-primary" 
+          onClick={() => { 
+            if (!user) {
+              alert('Please login or register to publish your guide listing.');
+              return;
+            }
+            setEditingDoc(null); 
+            setIsModalOpen(true); 
+          }}
+        >
+          + Register Guide Listing
+        </button>
       </div>
 
       {/* Advanced Filters & Quick Location Pills */}
@@ -130,9 +138,9 @@ export default function GuidesPage() {
       <div className="card-grid">
         {guides.map(guide => {
           // Ownership Check: User can ONLY Edit/Delete their OWN listing!
-          const isOwner = user && (
-            user.email?.toLowerCase() === guide.contactEmail?.toLowerCase() || 
-            user.email === 'admin@tourlanka.lk'
+          const isOwner = user && user.email && guide.contactEmail && (
+            user.email.trim().toLowerCase() === guide.contactEmail.trim().toLowerCase() || 
+            user.email.trim().toLowerCase() === 'admin@tourlanka.lk'
           );
 
           return (

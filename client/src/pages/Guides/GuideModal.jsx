@@ -135,10 +135,13 @@ export default function GuideModal({ isOpen, onClose, onSave, editingDoc }) {
                 type="email" 
                 className="form-control" 
                 required
+                readOnly={!editingDoc}
+                style={!editingDoc ? { background: '#f1f5f9', cursor: 'not-allowed', color: '#475569' } : {}}
                 placeholder="guide@tourlanka.lk" 
                 value={formData.contactEmail} 
                 onChange={e => setFormData({...formData, contactEmail: e.target.value})} 
               />
+              {!editingDoc && <small style={{ color: '#059669', fontSize: '11px', fontWeight: 600 }}>🔒 Bound to your logged-in account email ({formData.contactEmail || 'user'})</small>}
               {errors.contactEmail && <div className="error-text">{errors.contactEmail}</div>}
             </div>
           </div>
