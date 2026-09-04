@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-require('dotenv').config({ path: '../.env' });
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const Guide = require('../models/Guide');
 const Booking = require('../models/Booking');

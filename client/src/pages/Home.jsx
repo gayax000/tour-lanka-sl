@@ -10,16 +10,16 @@ export default function Home() {
     const fetchStats = async () => {
       try {
         const [g, b, t, r] = await Promise.all([
-          axios.get(`${API_BASE_URL}/api/guides`),
-          axios.get(`${API_BASE_URL}/api/bookings`),
-          axios.get(`${API_BASE_URL}/api/transports`),
-          axios.get(`${API_BASE_URL}/api/reviews`)
+          axios.get(`${API_BASE_URL}/api/guides`).catch(() => ({ data: [] })),
+          axios.get(`${API_BASE_URL}/api/bookings`).catch(() => ({ data: [] })),
+          axios.get(`${API_BASE_URL}/api/transports`).catch(() => ({ data: [] })),
+          axios.get(`${API_BASE_URL}/api/reviews`).catch(() => ({ data: [] }))
         ]);
         setStats({
-          guides: g.data.length,
-          bookings: b.data.length,
-          transports: t.data.length,
-          reviews: r.data.length
+          guides: Array.isArray(g.data) ? g.data.length : 0,
+          bookings: Array.isArray(b.data) ? b.data.length : 0,
+          transports: Array.isArray(t.data) ? t.data.length : 0,
+          reviews: Array.isArray(r.data) ? r.data.length : 0
         });
       } catch (err) { console.error(err); }
     };
