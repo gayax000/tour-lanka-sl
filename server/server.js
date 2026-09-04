@@ -15,7 +15,6 @@ app.use('/api/bookings', require('./routes/bookingRoutes'));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-// 4 Member Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/guides', require('./routes/guideRoutes'));
 app.use('/api/bookings', require('./routes/bookingRoutes'));
