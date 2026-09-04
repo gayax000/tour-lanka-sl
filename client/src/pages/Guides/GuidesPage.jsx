@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import API_BASE_URL from '../../api';
 import GuideModal from './GuideModal';
+import TouristBookingModal from './TouristBookingModal';
 
 export default function GuidesPage() {
   const [guides, setGuides] = useState([]);
@@ -10,6 +11,10 @@ export default function GuidesPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [districtFilter, setDistrictFilter] = useState('All');
   const [typeFilter, setTypeFilter] = useState('All');
+
+  // Tourist booking state
+  const [bookingProvider, setBookingProvider] = useState(null);
+  const [isTouristModalOpen, setIsTouristModalOpen] = useState(false);
 
   const user = JSON.parse(localStorage.getItem('tourLankaUser') || 'null');
   const isAdmin = user && user.role === 'admin';
@@ -118,9 +123,17 @@ export default function GuidesPage() {
             </div>
 
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #f1f5f9', paddingTop: '12px', marginTop: '16px' }}>
-              <a href={`mailto:${guide.contactEmail}?subject=Tour%20Inquiry%20TourLanka%20SL`} className="btn btn-primary" style={{ padding: '6px 14px', fontSize: '13px', flex: 1 }}>
-                ✉️ Book Inquiry
-              </a>
+              <button 
+                type="button"
+                className="btn btn-primary" 
+                style={{ padding: '8px 14px', fontSize: '13px', flex: 1 }}
+                onClick={() => {
+                  setBookingProvider(guide);
+                  setIsTouristModalOpen(true);
+                }}
+              >
+                📅 Book Now
+              </button>
 
               {isAdmin && (
                 <div style={{ display: 'flex', gap: '6px' }}>
@@ -134,6 +147,16 @@ export default function GuidesPage() {
       </div>
 
       <GuideModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleSave} editingDoc={editingDoc} />
+
+      {/* Tourist Provider Booking Modal */}
+      <TouristBookingModal 
+        isOpen={isTouristModalOpen} 
+        onClose={() => {
+          setIsTouristModalOpen(false);
+          setBookingProvider(null);
+        }} 
+        provider={bookingProvider} 
+      />
     </div>
   );
 }
